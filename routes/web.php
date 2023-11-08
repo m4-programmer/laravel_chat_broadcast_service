@@ -1,6 +1,9 @@
 <?php
 
+use BeyondCode\LaravelWebSockets\Apps\AppProvider;
+use BeyondCode\LaravelWebSockets\Dashboard\DashboardLogger;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -23,3 +26,13 @@ Auth::routes(['register'=>false]);
 
 
 
+Route::get('chat',function (AppProvider $appProvider){
+//    Log::info(DashboardLogger::LOG_CHANNEL_PREFIX);
+    return view('chat-app',[
+        "port"=>env("LARAVEL_WEBSOCKETS_PORT"),
+        "host"=>env("LARAVEL_WEBSOCKETS_HOST"),
+        'authEndpoint'=>"/api/sockets/connect",
+        "logChannel"=>DashboardLogger::LOG_CHANNEL_PREFIX,
+        "apps"=>$appProvider->all()
+    ]);
+});
